@@ -1,1 +1,3 @@
 http://www.infoq.com/cn/articles/nodejs-module-mechanism
+
+some changes
