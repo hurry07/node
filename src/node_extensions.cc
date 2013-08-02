@@ -30,6 +30,10 @@
 #undef NODE_EXT_LIST_ITEM
 #undef NODE_EXT_LIST_END
 
+//#define NODE_MODULE_DECL(modname) \
+//extern "C" node::node_module_struct modname ## _module;
+
+// 定义模板变量
 #define NODE_EXT_LIST_START
 #define NODE_EXT_LIST_ITEM NODE_MODULE_DECL
 #define NODE_EXT_LIST_END
@@ -40,6 +44,15 @@ NODE_EXT_LIST(NODE_EXT_LIST_START, NODE_EXT_LIST_ITEM, NODE_EXT_LIST_END)
 #undef NODE_EXT_LIST_ITEM
 #undef NODE_EXT_LIST_END
 
+//struct node_module_struct {
+//    int version;
+//    void *dso_handle;
+//    const char *filename;
+//    node::addon_register_func register_func;
+//    const char *modname;
+//};
+
+// 定义模板数组
 #define NODE_EXT_STRING(x) &x ## _module,
 #define NODE_EXT_LIST_START node::node_module_struct *node_module_list[] = {
 #define NODE_EXT_LIST_ITEM NODE_EXT_STRING
@@ -48,21 +61,22 @@ NODE_EXT_LIST(NODE_EXT_LIST_START, NODE_EXT_LIST_ITEM, NODE_EXT_LIST_END)
 NODE_EXT_LIST(NODE_EXT_LIST_START, NODE_EXT_LIST_ITEM, NODE_EXT_LIST_END)
 
 namespace node {
-
-node_module_struct* get_builtin_module(const char *name) {
-  char buf[128];
-  node_module_struct *cur = NULL;
-  snprintf(buf, sizeof(buf), "node_%s", name);
-  /* TODO: you could look these up in a hash, but there are only
-   * a few, and once loaded they are cached. */
-  for (int i = 0; node_module_list[i] != NULL; i++) {
-    cur = node_module_list[i];
-    if (strcmp(cur->modname, buf) == 0) {
-      return cur;
+    
+    node_module_struct* get_builtin_module(const char *name) {
+        char buf[128];
+        node_module_struct *cur = NULL;
+        snprintf(buf, sizeof(buf), "node_%s", name);
+        /* TODO: you could look these up in a hash, but there are only
+         * a few, and once loaded they are cached. */
+        for (int i = 0; node_module_list[i] != NULL; i++) {
+            cur = node_module_list[i];
+            printf("buildin module-->:%s\n", cur->modname);
+            if (strcmp(cur->modname, buf) == 0) {
+                return cur;
+            }
+        }
+        
+        return NULL;
     }
-  }
-
-  return NULL;
-}
-
+    
 }  // namespace node

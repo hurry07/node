@@ -130,7 +130,7 @@ Cached<String> domain_symbol;
 Persistent<Object> process_p;
 
 static Persistent<Function> process_tickCallback;
-static Persistent<Object> binding_cache;
+static Persistent<Object> binding_cache;// 所有已经加载模块的 cache
 static Persistent<Array> module_load_list;
 
 static Cached<String> exports_symbol;
@@ -1920,7 +1920,9 @@ void OnMessage(Handle<Message> message, Handle<Value> error) {
   FatalException(error, message);
 }
 
-
+/**
+ * 执行 native 模块
+ */
 static void Binding(const FunctionCallbackInfo<Value>& args) {
   HandleScope scope(node_isolate);
 
@@ -1940,11 +1942,17 @@ static void Binding(const FunctionCallbackInfo<Value>& args) {
   // Append a string to process.moduleLoadList
   char buf[1024];
   snprintf(buf, sizeof(buf), "Binding %s", *module_v);
+    printf("--->Binding %s\n", *module_v);
 
-  Local<Array> modules = PersistentToLocal(module_load_list);
+    Local<Array> modules = PersistentToLocal(module_load_list);
   uint32_t l = modules->Length();
   modules->Set(l, String::New(buf));
+    
+    if(*module_v == "console") {
+        printf("require console");
+    }
 
+    // buildin_module 就是用 c++ 实现的 module
   if ((modp = get_builtin_module(*module_v)) != NULL) {
     exports = Object::New();
     // Internal bindings don't have a "module" object,
@@ -1955,7 +1963,7 @@ static void Binding(const FunctionCallbackInfo<Value>& args) {
     exports = Object::New();
     DefineConstants(exports);
     cache->Set(module, exports);
-  } else if (!strcmp(*module_v, "natives")) {
+  } else if (!strcmp(*module_v, "natives")) {// js 实现的模块
     exports = Object::New();
     DefineJavaScript(exports);
     cache->Set(module, exports);
@@ -2198,7 +2206,9 @@ static void NeedImmediateCallbackSetter(Local<String> property,
   }
 }
 
-
+/**
+ * 建立一个 node.js 运行上下文
+ */
 Handle<Object> SetupProcessObject(int argc, char *argv[]) {
   HandleScope scope(node_isolate);
 
@@ -2263,6 +2273,7 @@ Handle<Object> SetupProcessObject(int argc, char *argv[]) {
 
   // process.platform
   process->Set(String::NewSymbol("platform"), String::New(PLATFORM));
+    printf("platform:%s", *String::Utf8Value(String::New(PLATFORM)));
 
   // process.argv
   Local<Array> arguments = Array::New(argc - option_end_index + 1);
@@ -2386,9 +2397,7 @@ Handle<Object> SetupProcessObject(int argc, char *argv[]) {
 
   // values use to cross communicate with processNextTick
   Local<Object> info_box = Object::New();
-  info_box->SetIndexedPropertiesToExternalArrayData(&tick_infobox,
-                                                    kExternalUnsignedIntArray,
-                                                    4);
+  info_box->SetIndexedPropertiesToExternalArrayData(&tick_infobox, kExternalUnsignedIntArray, 4);
   process->Set(String::NewSymbol("_tickInfoBox"), info_box);
 
   // pre-set _events object for faster emit checks
@@ -2408,7 +2417,10 @@ static void SignalExit(int signal) {
   _exit(128 + signal);
 }
 
-
+/**
+ * 使用 process_l 来执行 node.js 函数
+ *@process_l
+ */
 void Load(Handle<Object> process_l) {
   HandleScope handle_scope(node_isolate);
 
@@ -2429,6 +2441,7 @@ void Load(Handle<Object> process_l) {
   // are not safe to ignore.
   try_catch.SetVerbose(false);
 
+    // 使用之前编辑好的字符串, 给定文件名为 node.js
   Local<Value> f_value = ExecuteString(MainSource(), String::New("node.js"));
   if (try_catch.HasCaught())  {
     ReportException(try_catch);

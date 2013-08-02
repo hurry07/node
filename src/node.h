@@ -202,6 +202,7 @@ struct node_module_struct {
 
 node_module_struct* get_builtin_module(const char *name);
 
+// 自动就注册了?
 #define NODE_STANDARD_MODULE_STUFF \
           NODE_MODULE_VERSION,     \
           NULL,                    \

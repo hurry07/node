@@ -25,64 +25,64 @@
 #include "queue.h"
 
 namespace node {
-
-// defined in node.cc
-extern Cached<v8::String> process_symbol;
-extern Cached<v8::String> domain_symbol;
-extern QUEUE req_wrap_queue;
-
-template <typename T>
-class ReqWrap {
- public:
-  ReqWrap(v8::Handle<v8::Object> object = v8::Handle<v8::Object>()) {
-    v8::HandleScope scope(node_isolate);
-    if (object.IsEmpty()) object = v8::Object::New();
-    persistent().Reset(node_isolate, object);
-
-    if (using_domains) {
-      v8::Local<v8::Value> domain = v8::Context::GetCurrent()
-                                    ->Global()
-                                    ->Get(process_symbol)
-                                    ->ToObject()
-                                    ->Get(domain_symbol);
-
-      if (!domain->IsUndefined()) {
-        object->Set(domain_symbol, domain);
-      }
-    }
-
-    QUEUE_INSERT_TAIL(&req_wrap_queue, &req_wrap_queue_);
-  }
-
-
-  ~ReqWrap() {
-    QUEUE_REMOVE(&req_wrap_queue_);
-    // Assert that someone has called Dispatched()
-    assert(req_.data == this);
-    assert(!persistent().IsEmpty());
-    persistent().Dispose();
-  }
-
-  // Call this after the req has been dispatched.
-  void Dispatched() {
-    req_.data = this;
-  }
-
-  inline v8::Local<v8::Object> object() {
-    return v8::Local<v8::Object>::New(node_isolate, persistent());
-  }
-
-  inline v8::Persistent<v8::Object>& persistent() {
-    return object_;
-  }
-
-  v8::Persistent<v8::Object> object_;
-  QUEUE req_wrap_queue_;
-  void* data_;
-  T req_;  // *must* be last, GetActiveRequests() in node.cc depends on it
-};
-
-
+    
+    // defined in node.cc
+    extern Cached<v8::String> process_symbol;
+    extern Cached<v8::String> domain_symbol;
+    extern QUEUE req_wrap_queue;
+    
+    template <typename T>
+    class ReqWrap {
+    public:
+        ReqWrap(v8::Handle<v8::Object> object = v8::Handle<v8::Object>()) {
+            v8::HandleScope scope(node_isolate);
+            if (object.IsEmpty()) object = v8::Object::New();
+            persistent().Reset(node_isolate, object);
+            
+            if (using_domains) {
+                v8::Local<v8::Value> domain = v8::Context::GetCurrent()
+                ->Global()
+                ->Get(process_symbol)
+                ->ToObject()
+                ->Get(domain_symbol);
+                
+                if (!domain->IsUndefined()) {
+                    object->Set(domain_symbol, domain);
+                }
+            }
+            
+            QUEUE_INSERT_TAIL(&req_wrap_queue, &req_wrap_queue_);
+        }
+        
+        
+        ~ReqWrap() {
+            QUEUE_REMOVE(&req_wrap_queue_);
+            // Assert that someone has called Dispatched()
+            assert(req_.data == this);
+            assert(!persistent().IsEmpty());
+            persistent().Dispose();
+        }
+        
+        // Call this after the req has been dispatched.
+        void Dispatched() {
+            req_.data = this;
+        }
+        
+        inline v8::Local<v8::Object> object() {
+            return v8::Local<v8::Object>::New(node_isolate, persistent());
+        }
+        
+        inline v8::Persistent<v8::Object>& persistent() {
+            return object_;
+        }
+        
+        v8::Persistent<v8::Object> object_;
+        QUEUE req_wrap_queue_;
+        void* data_;
+        T req_;  // *must* be last, GetActiveRequests() in node.cc depends on it
+    };
+    
+    
 }  // namespace node
 
 

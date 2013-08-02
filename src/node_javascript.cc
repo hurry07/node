@@ -20,7 +20,7 @@
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "node.h"
-#include "node_natives.h"
+#include "node_natives.h"// 预加载的 js 模块
 #include "v8.h"
 
 #include <string.h>
@@ -29,28 +29,31 @@
 #endif
 
 namespace node {
-
 using v8::Handle;
 using v8::HandleScope;
 using v8::Local;
 using v8::Object;
 using v8::String;
 
+/**
+ * node_native.js
+ */
 Handle<String> MainSource() {
-  return String::New(node_native, sizeof(node_native) - 1);
+    return String::New(node_native, sizeof(node_native) - 1);
 }
 
+/**
+ * 把所有native模块加载到 target
+ */
 void DefineJavaScript(Handle<Object> target) {
-  HandleScope scope(node_isolate);
-
-  for (int i = 0; natives[i].name; i++) {
-    if (natives[i].source != node_native) {
-      Local<String> name = String::New(natives[i].name);
-      Handle<String> source = String::New(natives[i].source,
-                                                      natives[i].source_len);
-      target->Set(name, source);
+    HandleScope scope(node_isolate);
+    
+    for (int i = 0; natives[i].name; i++) {
+        if (natives[i].source != node_native) {
+            Local<String> name = String::New(natives[i].name);
+            Handle<String> source = String::New(natives[i].source, natives[i].source_len);
+            target->Set(name, source);
+        }
     }
-  }
 }
-
 }  // namespace node
