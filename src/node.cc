@@ -130,7 +130,7 @@ Cached<String> domain_symbol;
 Persistent<Object> process_p;
 
 static Persistent<Function> process_tickCallback;
-static Persistent<Object> binding_cache;// 所有已经加载模块的 cache
+static Persistent<Object> binding_cache;// 所有已经加载模块的 cache, 通过这个对象让模块不能被 gc
 static Persistent<Array> module_load_list;
 
 static Cached<String> exports_symbol;
@@ -1942,28 +1942,26 @@ static void Binding(const FunctionCallbackInfo<Value>& args) {
   // Append a string to process.moduleLoadList
   char buf[1024];
   snprintf(buf, sizeof(buf), "Binding %s", *module_v);
-    printf("--->Binding %s\n", *module_v);
+    printf("##Binding %s\n", *module_v);
 
     Local<Array> modules = PersistentToLocal(module_load_list);
   uint32_t l = modules->Length();
   modules->Set(l, String::New(buf));
-    
-    if(*module_v == "console") {
-        printf("require console");
-    }
 
     // buildin_module 就是用 c++ 实现的 module
-  if ((modp = get_builtin_module(*module_v)) != NULL) {
+  if ((modp = get_builtin_module(*module_v)) != NULL) {// c++ 实现的模块
+      printf("c++ module\n");
     exports = Object::New();
-    // Internal bindings don't have a "module" object,
-    // only exports.
+    // Internal bindings don't have a "module" object, only exports.
     modp->register_func(exports, Undefined(node_isolate));
     cache->Set(module, exports);
   } else if (!strcmp(*module_v, "constants")) {
+      printf("constants module\n");
     exports = Object::New();
     DefineConstants(exports);
     cache->Set(module, exports);
   } else if (!strcmp(*module_v, "natives")) {// js 实现的模块
+      printf("js module\n");
     exports = Object::New();
     DefineJavaScript(exports);
     cache->Set(module, exports);
@@ -2205,7 +2203,14 @@ static void NeedImmediateCallbackSetter(Local<String> property,
     uv_idle_stop(&idle_immediate_dummy);
   }
 }
-
+    void testProp(Local<Object> process, const char* name) {
+        Local<Value> v = process->Get(String::New(name));
+        if(v.IsEmpty()) {
+            printf("empty:%s\n", name);
+        } else {
+            printf("find:%s\n", name);
+        }
+    }
 /**
  * 建立一个 node.js 运行上下文
  */
@@ -2247,8 +2252,8 @@ Handle<Object> SetupProcessObject(int argc, char *argv[]) {
   versions->Set(String::NewSymbol("ares"), String::New(ARES_VERSION_STR));
   versions->Set(String::NewSymbol("uv"), String::New(uv_version_string()));
   versions->Set(String::NewSymbol("zlib"), String::New(ZLIB_VERSION));
-  versions->Set(String::NewSymbol("modules"),
-                String::New(NODE_STRINGIFY(NODE_MODULE_VERSION)));
+  versions->Set(String::NewSymbol("modules"), String::New(NODE_STRINGIFY(NODE_MODULE_VERSION)));
+
 #if HAVE_OPENSSL
   // Stupid code to slice out the version string.
   int c, l = strlen(OPENSSL_VERSION_TEXT);
@@ -2262,8 +2267,7 @@ Handle<Object> SetupProcessObject(int argc, char *argv[]) {
       break;
     }
   }
-  versions->Set(String::NewSymbol("openssl"),
-                String::New(&OPENSSL_VERSION_TEXT[i], j - i));
+  versions->Set(String::NewSymbol("openssl"), String::New(&OPENSSL_VERSION_TEXT[i], j - i));
 #endif
 
 
@@ -2307,9 +2311,7 @@ Handle<Object> SetupProcessObject(int argc, char *argv[]) {
 
   process->Set(String::NewSymbol("pid"), Integer::New(getpid(), node_isolate));
   process->Set(String::NewSymbol("features"), GetFeatures());
-  process->SetAccessor(String::New("_needImmediateCallback"),
-                       NeedImmediateCallbackGetter,
-                       NeedImmediateCallbackSetter);
+  process->SetAccessor(String::New("_needImmediateCallback"), NeedImmediateCallbackGetter, NeedImmediateCallbackSetter);
 
   // -e, --eval
   if (eval_string) {
@@ -3064,6 +3066,11 @@ int Start(int argc, char *argv[]) {
     Context::Scope context_scope(context);
 
     binding_cache.Reset(node_isolate, Object::New());
+      
+//      Local<FunctionTemplate> t = FunctionTemplate::New();
+//      t->SetClassName(String::New("process"));
+//      Local<Object> process = t->GetFunction()->NewInstance();
+//      testProp(process, "stdout");
 
     // Use original argv, as we're just copying values out of it.
     Local<Object> process_l = SetupProcessObject(argc, argv);

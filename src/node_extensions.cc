@@ -70,7 +70,7 @@ namespace node {
          * a few, and once loaded they are cached. */
         for (int i = 0; node_module_list[i] != NULL; i++) {
             cur = node_module_list[i];
-            printf("buildin module-->:%s\n", cur->modname);
+            printf("get buildin module-->:%s\n", cur->modname);
             if (strcmp(cur->modname, buf) == 0) {
                 return cur;
             }
