@@ -228,7 +228,6 @@ namespace node {
         script_.Dispose();
     }
     
-    
     void WrappedScript::CreateContext(const FunctionCallbackInfo<Value>& args) {
         HandleScope scope(node_isolate);
         
@@ -240,8 +239,7 @@ namespace node {
                 
                 CloneObject(args.This(), sandbox, context);
             } else {
-                return ThrowTypeError(
-                                      "createContext() accept only object as first argument.");
+                return ThrowTypeError("createContext() accept only object as first argument.");
             }
         }
         
@@ -256,35 +254,26 @@ namespace node {
     
     
     void WrappedScript::RunInThisContext(const FunctionCallbackInfo<Value>& args) {
-        WrappedScript::EvalMachine<
-        unwrapExternal, thisContext, returnResult, useTimeout>(args);
+        WrappedScript::EvalMachine<unwrapExternal, thisContext, returnResult, useTimeout>(args);
     }
-    
     
     void WrappedScript::RunInNewContext(const FunctionCallbackInfo<Value>& args) {
-        WrappedScript::EvalMachine<
-        unwrapExternal, newContext, returnResult, useTimeout>(args);
+        WrappedScript::EvalMachine<unwrapExternal, newContext, returnResult, useTimeout>(args);
     }
     
     
-    void WrappedScript::CompileRunInContext(
-                                            const FunctionCallbackInfo<Value>& args) {
-        WrappedScript::EvalMachine<
-        compileCode, userContext, returnResult, useTimeout>(args);
+    void WrappedScript::CompileRunInContext(const FunctionCallbackInfo<Value>& args) {
+        WrappedScript::EvalMachine<compileCode, userContext, returnResult, useTimeout>(args);
     }
     
     
-    void WrappedScript::CompileRunInThisContext(
-                                                const FunctionCallbackInfo<Value>& args) {
-        WrappedScript::EvalMachine<
-        compileCode, thisContext, returnResult, useTimeout>(args);
+    void WrappedScript::CompileRunInThisContext(const FunctionCallbackInfo<Value>& args) {
+        WrappedScript::EvalMachine<compileCode, thisContext, returnResult, useTimeout>(args);
     }
     
     
-    void WrappedScript::CompileRunInNewContext(
-                                               const FunctionCallbackInfo<Value>& args) {
-        WrappedScript::EvalMachine<
-        compileCode, newContext, returnResult, useTimeout>(args);
+    void WrappedScript::CompileRunInNewContext(const FunctionCallbackInfo<Value>& args) {
+        WrappedScript::EvalMachine<compileCode, newContext, returnResult, useTimeout>(args);
     }
     
     
@@ -354,6 +343,7 @@ namespace node {
             context = nContext->GetV8Context();
         }
         
+        // 这样就能进入 context 了
         Context::Scope context_scope(context);
         
         // New and user context share code. DRY it up.
@@ -372,30 +362,33 @@ namespace node {
         Handle<Value> result;
         Local<Script> script;
         
+        // 
         if (input_flag == compileCode) {
             // well, here WrappedScript::New would suffice in all cases, but maybe
             // Compile has a little better performance where possible
             script = output_flag == returnResult ? Script::Compile(code, filename) : Script::New(code, filename);
             if (script.IsEmpty()) {
                 // FIXME UGLY HACK TO DISPLAY SYNTAX ERRORS.
-                if (display_error) DisplayExceptionLine(try_catch.Message());
+                if (display_error) {
+                    DisplayExceptionLine(try_catch.Message());  
+                }
                 
                 // Hack because I can't get a proper stacktrace on SyntaxError
                 try_catch.ReThrow();
                 return;
             }
         } else {
+            // 当前对象已经是一个包装过的 script 对象了
             WrappedScript *n_script = ObjectWrap::Unwrap<WrappedScript>(args.This());
             if (!n_script) {
                 return ThrowError("Must be called as a method of Script.");
             } else if (n_script->script_.IsEmpty()) {
-                return ThrowError(
-                                  "'this' must be a result of previous new Script(code) call.");
+                return ThrowError("'this' must be a result of previous new Script(code) call.");
             }
-            
             script = Local<Script>::New(node_isolate, n_script->script_);
         }
         
+        // run and return result
         if (output_flag == returnResult) {
             if (timeout) {
                 Watchdog wd(timeout);
@@ -413,6 +406,7 @@ namespace node {
                 return;
             }
         } else {
+            // wrapExternal, 好像替换了 Script 对象?
             WrappedScript *n_script = ObjectWrap::Unwrap<WrappedScript>(args.This());
             if (!n_script) {
                 return ThrowError("Must be called as a method of Script.");
@@ -421,6 +415,7 @@ namespace node {
             result = args.This();
         }
         
+        // 这有点太傻了吧
         if (context_flag == userContext || context_flag == newContext) {
             // success! copy changes back onto the sandbox object.
             CloneObject(args.This(), context->Global()->GetPrototype(), sandbox);

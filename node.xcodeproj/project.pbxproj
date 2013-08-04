@@ -156,26 +156,12 @@
 			remoteGlobalIDString = D0B95577B7973315B3D92003;
 			remoteInfo = mksnapshot.x64;
 		};
-		1E912F362A8EF429F7038029 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1F1A71EC5B150AAADAFA7FC1 /* http_parser.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 2C3D692EDB432A59FB72344A;
-			remoteInfo = http_parser;
-		};
 		29C4D2D3C406DF64C0E492A3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 305E2AEA20271EF0BB988C63 /* cares.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = F8608A9624CF2F7965F4A05E;
 			remoteInfo = cares;
-		};
-		2E1ADB1F315AB886DFE38C87 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3D17D70DA25B9278175B4B6D /* zlib.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = CFE557433A4D2EFFDC01DBB4;
-			remoteInfo = zlib;
 		};
 		30644DE818214B42127C1267 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -233,20 +219,6 @@
 			remoteGlobalIDString = 69663840867AD51514E537ED;
 			remoteInfo = test;
 		};
-		4C171324E18100A1AB1AB2C4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ED776A29774C01D5EB51D9E3 /* uv.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 178071661CB321BB5A46AC92;
-			remoteInfo = libuv;
-		};
-		550545F0E263A4DCFF944301 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ED776A29774C01D5EB51D9E3 /* uv.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 23865AA7E8F763477A053BED;
-			remoteInfo = uv_dtrace_header;
-		};
 		55DA3587C133024815076896 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5A70E31DE9419CBDE30F1BC0 /* v8.xcodeproj */;
@@ -268,13 +240,6 @@
 			remoteGlobalIDString = EB2A415884799FF9DE194FF2;
 			remoteInfo = node_perfctr;
 		};
-		77106EB092DEB9A9A780872D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 725C027AB6E4550B9EE4BD5A /* openssl.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = E53F90E6C0DABF34DAEBCE16;
-			remoteInfo = openssl;
-		};
 		8A44E81BC4E31336262BF92F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = ED776A29774C01D5EB51D9E3 /* uv.xcodeproj */;
@@ -295,13 +260,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 4F89D0D57B563C9F1B5149F0;
 			remoteInfo = zlib;
-		};
-		918893BC4383B7D03B217E6D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 305E2AEA20271EF0BB988C63 /* cares.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 0A70FF350669B5C5B49C4871;
-			remoteInfo = cares;
 		};
 		9932C9FCC4F778596762C2A2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -437,6 +395,7 @@
 		180272C617AC0D8000C04D8A /* util.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = util.js; sourceTree = "<group>"; };
 		180272C717AC0D8000C04D8A /* vm.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = vm.js; sourceTree = "<group>"; };
 		180272C817AC0D8000C04D8A /* zlib.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = zlib.js; sourceTree = "<group>"; };
+		186CB7B017AD3DB3007CEC93 /* config.gypi */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.gypi; sourceTree = "<group>"; };
 		1A77D1BF9BD617019FCCBE13 /* http_parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = http_parser.h; sourceTree = "<group>"; };
 		1B2C055868A1421B53AFF59A /* stream_wrap.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stream_wrap.cc; sourceTree = "<group>"; };
 		1F1A71EC5B150AAADAFA7FC1 /* http_parser.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = http_parser.xcodeproj; path = deps/http_parser/http_parser.xcodeproj; sourceTree = SOURCE_ROOT; };
@@ -463,7 +422,6 @@
 		3D17D70DA25B9278175B4B6D /* zlib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = zlib.xcodeproj; path = deps/zlib/zlib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		3DC0E8F9BA80C311E52A535B /* -lm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "-lm"; sourceTree = "<group>"; };
 		400EA1C975C2B8BAC2816691 /* node_dtrace.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = node_dtrace.cc; sourceTree = "<group>"; };
-		41A50CAA7D446DB8BF990F5E /* config.gypi */ = {isa = PBXFileReference; lastKnownFileType = text; path = config.gypi; sourceTree = "<group>"; };
 		42A3A7054EE38AC404297714 /* dns.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = dns.js; sourceTree = "<group>"; };
 		44D56DB8FEFF9B17C64633D2 /* v8.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = v8.h; sourceTree = "<group>"; };
 		49C0E011B014FB4009003A92 /* node_extensions.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = node_extensions.cc; sourceTree = "<group>"; };
@@ -720,7 +678,7 @@
 				66B1D080F16CE76E35298272 /* lib */,
 				520CB2E84A576819C5FAF3CB /* src */,
 				C0774FC6B0265CA7475D10A3 /* common.gypi */,
-				41A50CAA7D446DB8BF990F5E /* config.gypi */,
+				186CB7B017AD3DB3007CEC93 /* config.gypi */,
 				1802727D17ABCB9A00C04D8A /* node.txt */,
 			);
 			name = Source;
@@ -975,18 +933,12 @@
 			);
 			dependencies = (
 				96AF5443E2B7DA43D272C965 /* PBXTargetDependency */,
-				FB44F42F3893D86E504D6B1E /* PBXTargetDependency */,
 				68133B572DD5999E972D8E4A /* PBXTargetDependency */,
 				CFEC8FF663E2E8922763B79D /* PBXTargetDependency */,
 				AA15E93E5714CFE4468FF390 /* PBXTargetDependency */,
-				E443FCBE60BD4F2A5AD36E64 /* PBXTargetDependency */,
-				90C8BA8BA8314436E8C2F613 /* PBXTargetDependency */,
-				0ACA6732D47953A88EE21891 /* PBXTargetDependency */,
-				82D03AD7C6A23B2E8D538668 /* PBXTargetDependency */,
 				6394DC71A0CC7A27F7929123 /* PBXTargetDependency */,
 				7687F0A827487CFD29E1E150 /* PBXTargetDependency */,
 				C3960975AB1966FE2AA0C00B /* PBXTargetDependency */,
-				E671F57D825AE5BF0559B499 /* PBXTargetDependency */,
 			);
 			name = node;
 			productName = node;
@@ -1274,11 +1226,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		0ACA6732D47953A88EE21891 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = cares;
-			targetProxy = 918893BC4383B7D03B217E6D /* PBXContainerItemProxy */;
-		};
 		1E6AFA0C90A2234D22AC5471 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = EB2A415884799FF9DE194FF2 /* node_perfctr */;
@@ -1303,16 +1250,6 @@
 			isa = PBXTargetDependency;
 			name = v8_snapshot;
 			targetProxy = 47C593A8C55A2523A107D5C0 /* PBXContainerItemProxy */;
-		};
-		82D03AD7C6A23B2E8D538668 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = libuv;
-			targetProxy = 4C171324E18100A1AB1AB2C4 /* PBXContainerItemProxy */;
-		};
-		90C8BA8BA8314436E8C2F613 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = http_parser;
-			targetProxy = 1E912F362A8EF429F7038029 /* PBXContainerItemProxy */;
 		};
 		96AF5443E2B7DA43D272C965 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1349,16 +1286,6 @@
 			name = "postmortem-metadata";
 			targetProxy = F840AC14B814950D73656EDE /* PBXContainerItemProxy */;
 		};
-		E443FCBE60BD4F2A5AD36E64 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = zlib;
-			targetProxy = 2E1ADB1F315AB886DFE38C87 /* PBXContainerItemProxy */;
-		};
-		E671F57D825AE5BF0559B499 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = uv_dtrace_header;
-			targetProxy = 550545F0E263A4DCFF944301 /* PBXContainerItemProxy */;
-		};
 		ECE32FB3B7DE72093B5A2C0B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BE1EFFAE8CE285443C612B73 /* node_dtrace_provider */;
@@ -1368,11 +1295,6 @@
 			isa = PBXTargetDependency;
 			target = 73A8D3370A961A3335F61A6B /* node_js2c */;
 			targetProxy = 39EDC2ADA02EF42419E71790 /* PBXContainerItemProxy */;
-		};
-		FB44F42F3893D86E504D6B1E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = openssl;
-			targetProxy = 77106EB092DEB9A9A780872D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1475,9 +1397,7 @@
 					deps/cares/include,
 					deps/uv/include,
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(SDKROOT)/System/Library/Frameworks",
-				);
+				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/System/Library/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = "-fno-strict-aliasing";
 				OTHER_LDFLAGS = "-Wl,-search_paths_first";
@@ -1728,9 +1648,7 @@
 					deps/cares/include,
 					deps/uv/include,
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(SDKROOT)/System/Library/Frameworks",
-				);
+				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/System/Library/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = "-fno-strict-aliasing";
 				OTHER_LDFLAGS = "-Wl,-search_paths_first";

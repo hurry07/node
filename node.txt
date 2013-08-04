@@ -3,3 +3,5 @@ http://www.infoq.com/cn/articles/nodejs-module-mechanism
 http://blog.peschla.net/2012/10/exploring-v8/
 
 http://ruby-china.org/topics/7365
+
+/Users/jie/enviroment/svg/project/lijie/gljs/jni

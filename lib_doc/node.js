@@ -124,7 +124,6 @@
                 // Main entry point into most programs:
                 Module.runMain();
             }
-
         } else {
             var Module = NativeModule.require('module');
 
@@ -772,6 +771,12 @@
     NativeModule._source = process.binding('natives');// 预制的 js 文件和对应关系
     NativeModule._cache = {};
 
+    /**
+     * 请求一个模块
+     *
+     * @param id
+     * @returns {*}
+     */
     NativeModule.require = function(id) {
         if (id == 'native_module') {
             return NativeModule;
